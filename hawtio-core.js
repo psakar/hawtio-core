@@ -1,6 +1,6 @@
 
 // hawtio log initialization
-/* globals Logger window console document localStorage $ angular jQuery navigator Jolokia */
+/* globals Logger window console document localStorage jQuery angular jQuery navigator Jolokia */
 
 Logger.setLevel(Logger.INFO);
 Logger.storagePrefix = 'hawtio';
@@ -385,7 +385,7 @@ var hawtioPluginLoader = (function(self) {
             });
           }
           self.log.debug("Executed tasks: ", executedTasks);
-          callback(); 
+          callback();
         }
       });
 
@@ -461,14 +461,14 @@ var hawtioPluginLoader = (function(self) {
 
       // keep track of when scripts are loaded so we can execute the callback
       var loaded = 0;
-      $.each(plugins, function(key, data) {
+      jQuery.each(plugins, function(key, data) {
         loaded = loaded + data.Scripts.length;
       });
 
       var totalScripts = loaded;
 
       var scriptLoaded = function() {
-        $.ajaxSetup({async:true});
+        jQuery.ajaxSetup({async:true});
         loaded = loaded - 1;
         if (lcb) {
           lcb.scriptLoaderCallback(lcb, totalScripts, loaded + 1);
@@ -479,7 +479,7 @@ var hawtioPluginLoader = (function(self) {
       };
 
       if (loaded > 0) {
-        $.each(plugins, function(key, data) {
+        jQuery.each(plugins, function(key, data) {
 
           data.Scripts.forEach( function(script) {
 
@@ -487,8 +487,8 @@ var hawtioPluginLoader = (function(self) {
 
             var scriptName = data.Context + "/" + script;
             log.debug("Fetching script: ", scriptName);
-            $.ajaxSetup({async:false});
-            $.getScript(scriptName)
+            jQuery.ajaxSetup({async:false});
+            jQuery.getScript(scriptName)
             .done(function(textStatus) {
               log.debug("Loaded script: ", scriptName);
             })
@@ -500,7 +500,7 @@ var hawtioPluginLoader = (function(self) {
         });
       } else {
         // no scripts to load, so just do the callback
-        $.ajaxSetup({async:true});
+        jQuery.ajaxSetup({async:true});
         bootstrap();
       }
     };
@@ -520,7 +520,7 @@ var hawtioPluginLoader = (function(self) {
 
       var regex = new RegExp(/^jolokia:/);
 
-      $.each(self.urls, function(index, url) {
+      jQuery.each(self.urls, function(index, url) {
 
         if (regex.test(url)) {
           var parts = url.split(':');
@@ -533,7 +533,7 @@ var hawtioPluginLoader = (function(self) {
 
           try {
             var data = jolokia.getAttribute(attribute, null);
-            $.extend(plugins, data);
+            jQuery.extend(plugins, data);
           } catch (Exception) {
             // console.error("Error fetching data: " + Exception);
           }
@@ -542,7 +542,7 @@ var hawtioPluginLoader = (function(self) {
 
           log.debug("Trying url: ", url);
 
-          $.get(url, function (data) {
+          jQuery.get(url, function (data) {
             if (angular.isString(data)) {
               try {
                 data = angular.fromJson(data);
@@ -552,7 +552,7 @@ var hawtioPluginLoader = (function(self) {
               }
             }
             // log.debug("got data: ", data);
-            $.extend(plugins, data);
+            jQuery.extend(plugins, data);
           }).always(function() {
             urlLoaded();
           });
@@ -646,8 +646,8 @@ var HawtioCore;
     }]);
 
 
-    // Holds a mapping of plugins to layouts, plugins use 
-    // this to specify a full width view, tree view or their 
+    // Holds a mapping of plugins to layouts, plugins use
+    // this to specify a full width view, tree view or their
     // own custom view
     _module.factory('viewRegistry', function() {
       return {};
@@ -706,7 +706,7 @@ var HawtioCore;
         getAddLink: function() {
           return '';
         }
-      }; 
+      };
     });
 
     // Placeholder service for branding
@@ -728,7 +728,7 @@ var HawtioCore;
     hawtioPluginLoader.addModule(HawtioCore.pluginName);
 
     // bootstrap the app
-    $(function () {
+    jQuery(function () {
 
       jQuery.uaMatch = function( ua ) {
         ua = ua.toLowerCase();
@@ -765,7 +765,7 @@ var HawtioCore;
 
         jQuery.browser = browser;
       }
-      
+
       hawtioPluginLoader.loadPlugins(function() {
         if (!HawtioCore.injector) {
           var strictDi = localStorage['hawtioCoreStrictDi'] || false;
