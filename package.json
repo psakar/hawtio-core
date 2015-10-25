@@ -1,6 +1,6 @@
 {
   "name": "hawtio-core",
-  "version": "2.0.5",
+  "version": "2.0.19-platforma",
   "dependencies": {},
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install && gulp bower"
