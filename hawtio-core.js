@@ -772,6 +772,10 @@ var HawtioCore;
           if (strictDi) {
             log.debug("Using strict dependency injection");
           }
+          if (hawtioCoreExternalInitialization) {
+			log.debug("External initialization");
+			return;
+		  }
           HawtioCore.injector = angular.bootstrap(document, hawtioPluginLoader.getModules(), {
             strictDi: strictDi
           });
